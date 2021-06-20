@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, send_from_directory, request
+from flask import Flask, render_template, send_from_directory, request, g
 from dotenv import load_dotenv
 from app.python.posts.postPageGenerator import PostPageGenerator
 from app.python.posts.comment import Comment
@@ -7,15 +7,18 @@ from app.python.posts.post import Post
 from app.python.gallery.galleryController import GalleryController
 from app.python.gallery.image import Image
 from PIL import Image as IMG
+from app.python.database import Database
 
 load_dotenv()
 app = Flask(__name__)
 
-postGenerator = PostPageGenerator()
-galleryGenerator = GalleryController()
-
 UPLOAD_FOLDER = '../app/static/img'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+databaseHolder = Database()
+
+with app.app_context():
+    postGenerator = PostPageGenerator(databaseHolder.get_db(g))
+    galleryGenerator = GalleryController(databaseHolder.get_db(g))
 
 @app.route('/')
 def index():
@@ -128,7 +131,7 @@ def gallery():
         
         imageTitle = galleryImage.imageTitle
         imageDescription = galleryImage.imageDescription
-        imageFile.save(YOUR_PATH + 'app\\static\\img\\galleryImageTemplate.jpg')
+        imageFile.save('app/static/img/galleryImageTemplate.jpg')
   
     else:
         print("NOPE")
@@ -166,3 +169,9 @@ def createImage():
     imageToAdd = Image(-1,encoded_file,title,description)
     galleryGenerator.addImage(imageToAdd)
     return gallery()
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
