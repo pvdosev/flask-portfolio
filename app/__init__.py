@@ -170,6 +170,10 @@ def createImage():
     galleryGenerator.addImage(imageToAdd)
     return gallery()
 
+@app.route("/health")
+def health():
+    return "ok"
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
