@@ -1,19 +1,13 @@
 import os
 from flask import Flask, render_template, send_from_directory, request, g, escape
 
-from app.python.database import Database
-
 def create_app(test_config=None):
 
     app = Flask(__name__)
 
-    UPLOAD_FOLDER = '../app/static/img'
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    databaseHolder = Database()
-
-     app.config.from_mapping(
+    app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'folio.sqlite'),
     )
 
     if test_config is None:
@@ -50,10 +44,10 @@ def create_app(test_config=None):
     def health():
         return "ok"
 
-    @app.teardown_appcontext
-    def close_connection(exception):
-        db = getattr(g, '_database', None)
-        if db is not None:
-            db.close()
+    from . import db
+    db.init_app(app)
+
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     return app
