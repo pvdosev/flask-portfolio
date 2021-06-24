@@ -27,14 +27,6 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html', title="Gamer Fellowship", url=os.getenv("URL"))
 
-    @app.route('/blog')
-    def blog():
-        return "hi"
-
-    @app.route('/blog/<post>')
-    def post(post):
-         return f"Hello, {escape(post)}!"
-
     @app.route("/character")
     def character():
         return render_template('character.html', title="About Us", url=os.getenv("URL"))
@@ -49,5 +41,9 @@ def create_app(test_config=None):
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import blog
+    app.register_blueprint(blog.bp)
+    app.add_url_rule('/blog', endpoint='index')
 
     return app

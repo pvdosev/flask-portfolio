@@ -21,7 +21,7 @@
     <aside class="welcome intro" id="thirdLine">Lived the Gamer Fellowship!</aside>
     <header></header>
     <nav class="menuFlex">
-        <a href="/blog" class="door">
+        <a href="{{ url_for('blog.index') }}" class="door">
             <p class="sign">Blog</p>
             <img src="/static/img/door.png"
             onmouseover="this.src='/static/img/doorlit.png'"
@@ -35,10 +35,7 @@
         </a>
         <a class="door" href="/gallery">
             <p class="sign">Gallery</p>
-            <img src="/static/img/door2.png"
-            onmouseover="this.src='/static/img/doorlit.png'"
-            onmouseout="this.src='/static/img/door2.png'">
-
+            <img src="/static/img/door2.png">
         </a>
     </nav>
 </body>
