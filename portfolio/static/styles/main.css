@@ -33,11 +33,27 @@
 
 /* Disable the below rule to start the intro animation!
    Enable to stop it from playing every time */
-/*.intro {
+.intro {
     display: none;
-}*/
+}
 
-.menuFlex {
+/* Main page stuff */
+
+body {
+    background-color: #3a2130;
+    background-image: url("../img/stones.png");
+    width: auto; 
+    overflow-x: hidden;
+    font-family: "Atlantis", normal;
+    margin: 0px;
+    color: #DDD184;
+}
+
+body > * {
+    font-size: 1.5rem;
+}
+
+nav {
     display: flex;
     flex-wrap: wrap;
     margin: 0px auto;
@@ -46,7 +62,7 @@
     background-image: url("../img/bricks.png");
 }
 
-.menuFlex::after {
+nav::after {
     content: "";
     width: 100%;
     background-color: #FFBA10;
@@ -54,6 +70,13 @@
     height: 64px;
     background-image: url("../img/curb.png");
 }
+
+nav h1 { flex: auto; margin: 2em; }
+nav ul li a { text-decoration: none; padding: 2rem 2rem; }
+nav ul { display: flex; list-style: none; margin: 2em; }
+nav ul li { padding: 2em; }
+
+header { margin: 1em }
 
 .teamFlex {
     flex-wrap: wrap;
@@ -74,40 +97,44 @@
 }
 
 #team {
-    border-image: url("../img/border.png");
-    border-image-slice: 24 fill;
-    border-image-width: 30px;
     margin: 4em;
     padding: 2em;
 }
 
-.teamFlex>div {
-    font-size: 2em;
+.border2, .post {
+    border-image: url("../img/border.png");
+    border-image-slice: 24 fill;
+    border-image-width: 30px;
+}
+
+.post { padding: 2em; margin: 1em; }
+
+.post *, .post h1 {color: #241736}
+
+.border1, nav ul li a, header a {
     font-family: "Atlantis", normal;
-    color: #DDD184;
     text-shadow: 0px 2px #665642;   
     border-style: dashed solid;
-    padding: 2em;
     border-image: url("../img/border1.png");
     border-image-slice: 20 fill;
     border-image-width: 30px;
+    color: #DDD184;
 }
-.teamFlex>div>hr{
+
+.teamFlex>div {
+    font-size: 2em;
+    padding: 2em;
+}
+
+hr{
     color: #DDD184;
 }
 
 .door>p {
     text-align: center;
     font-size: 3em;
-    font-family: "Atlantis", normal;
-    color: #DDD184;
-    text-shadow: 0px 2px #665642;   
-    border-style: dashed solid;
     margin: 0.6em auto;
     padding: 0.5em 0px;
-    border-image: url("../img/border1.png");
-    border-image-slice: 20 fill;
-    border-image-width: 30px;
 }
 
 .door {
@@ -161,14 +188,8 @@
     animation-duration: 3s;
 }
 
-body {
-    background-color: #3a2130;
-    background-image: url("../img/stones.png");
-    width: auto; 
-    overflow-x: hidden;
-    font-family: "Atlantis", normal;
-    margin: 0px;
-}
+
+h1 { font-family: "Atlantis Headline"; color: #B9A9AD; margin: 1rem 0; }
 
 @keyframes vanish{
   0%{
