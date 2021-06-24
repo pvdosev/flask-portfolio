@@ -25,6 +25,7 @@ def create():
         title = request.form['title']
         body = request.form['body']
         error = None
+        slug = "TODO"
 
         if not title:
             error = 'Title is required.'
@@ -34,9 +35,9 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO post (title, body, author_id, slug)'
+                ' VALUES (?, ?, ?, ?)',
+                (title, body, g.user['id'], slug)
             )
             db.commit()
             return redirect(url_for('blog.index'))

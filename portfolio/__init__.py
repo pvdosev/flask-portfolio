@@ -6,7 +6,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY='shush',
         DATABASE=os.path.join(app.instance_path, 'folio.sqlite'),
     )
 
