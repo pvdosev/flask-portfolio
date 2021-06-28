@@ -16,8 +16,19 @@ def index():
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    print(tuple(posts[0]), "THIS SHOULDN'T BE A NUMBER")
     return render_template('blog/index.html', posts=posts)
+
+@bp.route('/<slug>')
+def post():
+    db = get_db()
+    post = db.execute(
+        'SELECT p.slug, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.slug = ?',
+        (slug)
+    ).fetchone()
+
+    return render_template('blog/post.html', post=post)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -35,7 +46,6 @@ def create():
         cur.row_factory = lambda cursor, row: row[0] 
         otherslugs = cur.execute( 'SELECT slug FROM post' ).fetchall()
 
-        print(otherslugs[0][0])
 
         if slug in otherslugs:
             error = "Conflicting title."
@@ -52,7 +62,7 @@ def create():
                 (slug, title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('blog'))
 
     return render_template('blog/create.html')
 
@@ -61,7 +71,7 @@ def get_post(slug, check_author=True):
         'SELECT p.slug, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' WHERE p.slug = ?',
-        (slug,)
+        (slug)
     ).fetchone()
 
     if post is None:
@@ -95,7 +105,7 @@ def update(slug):
                 (title, body, slug)
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('blog'))
 
     return render_template('blog/update.html', post=post)
 
@@ -106,4 +116,4 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE slug = ?', (slug,))
     db.commit()
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('blog'))
