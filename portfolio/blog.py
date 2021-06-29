@@ -18,8 +18,9 @@ def index():
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
 
+''' TODO: Make this work
 @bp.route('/<slug>')
-def post():
+def post(slug):
     db = get_db()
     post = db.execute(
         'SELECT p.slug, title, body, created, author_id, username'
@@ -28,7 +29,8 @@ def post():
         (slug)
     ).fetchone()
 
-    return render_template('blog/post.html', post=post)
+    return post
+'''
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
