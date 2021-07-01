@@ -23,19 +23,17 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        #db = get_db()
         error = None
 
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif User.get_or_none(User.username == username) is not None: # db.execute( 'SELECT id FROM user WHERE username = ?', (username,)).fetchone()
+        elif User.get_or_none(User.username == username) is not None:
             error = f"User {username} is already registered."
 
         if error is None:
             User.create(username=username, password=generate_password_hash(password))
-            #db.execute('INSERT INTO user (username, password) VALUES (?, ?)',(username, generate_password_hash(password)))db.commit()
             return redirect(url_for('auth.login'))
 
         flash(error)
@@ -47,9 +45,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        #db = get_db()
         error = None
-        #user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
         user = User.get_or_none(User.username == username)
 
         if user is None:
