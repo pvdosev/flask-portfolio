@@ -5,7 +5,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from portfolio.db import get_db
+from portfolio.models import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -16,33 +16,26 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = User.get_by_id(user_id)
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+        #db = get_db()
         error = None
 
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
+        elif User.get_or_none(User.username == username) is not None: # db.execute( 'SELECT id FROM user WHERE username = ?', (username,)).fetchone()
             error = f"User {username} is already registered."
 
         if error is None:
-            db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
-            )
-            db.commit()
+            User.create(username=username, password=generate_password_hash(password))
+            #db.execute('INSERT INTO user (username, password) VALUES (?, ?)',(username, generate_password_hash(password)))db.commit()
             return redirect(url_for('auth.login'))
 
         flash(error)
@@ -54,20 +47,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+        #db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        #user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
+        user = User.get_or_none(User.username == username)
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = 'Incorrect password.'
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['user_id'] = user.user_id
             return redirect(url_for('index'))
 
         flash(error)
