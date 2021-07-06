@@ -5,7 +5,7 @@ services:
     build: .
     restart: unless-stopped
     env_file:
-      - ./instance/app.env
+      - .env
 #    volumes:
 #      - ./instance/folio.sqlite:/app/instance/folio.sqlite # The sqlite3 file used to live
     networks:
@@ -17,7 +17,7 @@ services:
     image: postgres:alpine
     restart: unless-stopped
     env_file:
-      - ./instance/database.env
+      - .env
     logging:
         options:
           max-size: 10m
@@ -29,7 +29,6 @@ services:
 
   nginx:
     container_name: nginx
-    env_file: ./instance/nginx-certbot.env
     build: 
       context: ./nginx
       network: host
@@ -37,6 +36,7 @@ services:
         - CERTBOT_EMAIL=$CERTBOT_EMAIL # set in ./instance/nginx-certbot.env
         - DOMAIN_LIST=$DOMAIN_LIST # again, set ./instance/nginx-certbot.env
     restart: unless-stopped
+    env_file: .env
     ports:
       - 80:80
       - 443:443
