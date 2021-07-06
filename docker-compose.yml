@@ -6,8 +6,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./instance/app.env
-    volumes:
-      - ./instance/folio.sqlite:/app/instance/folio.sqlite
+#    volumes:
+#      - ./instance/folio.sqlite:/app/instance/folio.sqlite # The sqlite3 file used to live
     networks:
       - folio
     depends_on:
@@ -33,15 +33,15 @@ services:
       context: ./nginx
       network: host
       args:
-        - CERTBOT_EMAIL # set in build command
-        - DOMAIN_LIST # again, set in build command
+        - CERTBOT_EMAIL=$CERTBOT_EMAIL # set in ./instance/nginx-certbot.env
+        - DOMAIN_LIST=$DOMAIN_LIST # again, set ./instance/nginx-certbot.env
     restart: unless-stopped
     env_file: ./instance/nginx-certbot.env
-    ports: 
+    ports:
       - 80:80
       - 443:443
     volumes:
-      - ./instance/nginx_secrets:/etc/letsencrypt
+      - letsencrypt:/etc/letsencrypt
       - ./nginx/:/etc/nginx/user_conf.d
     depends_on:
       - web
@@ -50,3 +50,6 @@ services:
 networks:
   folio:
     driver: bridge
+
+volumes:
+  letsencrypt:

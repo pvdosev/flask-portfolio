@@ -6,10 +6,9 @@ A small pixel styled portfolio website with a blog, written with Flask and SQLit
 
 ## Installation
 
-Make sure you have python3 and pip installed
+### Bare metal:
 
-Change line 131 of the __init__.py file to your own absolute path before running the app
-
+Make sure you have `python3` and `pip` installed
 
 Create virtual environment using virtualenv
 ```bash
@@ -20,6 +19,17 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install all dep
 
 ```bash
 pip install -r requirements.txt
+```
+### Docker:
+
+Make sure you have `docker` and `docker-compose` installed and running.
+
+Modify the example .env files, which will get loaded by Docker.
+They are located inside the `instance` directory.
+
+Run
+```bash
+docker-compose up
 ```
 
 ## Usage
@@ -49,17 +59,3 @@ $ flask run
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
-
-Currently, the system design is as  follows:
-
-### Post Component
-![Post component uml diagram](https://media.discordapp.net/attachments/851608538710540319/853089116485189642/unknown.png)
-
-### Post Database
-![Post database design](https://media.discordapp.net/attachments/851608538710540319/853089683310510160/unknown.png)
-
-### Gallery Component
-![Gallery component UML Diagram](https://media.discordapp.net/attachments/851608538710540319/853091712851640320/unknown.png)
-
-### Gallery Database
-![Gallery database design](https://media.discordapp.net/attachments/851608538710540319/853091970544435259/unknown.png)
