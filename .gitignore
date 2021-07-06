@@ -1,7 +1,9 @@
 .venv
 __pycache__
 *.pyc
-.env
-python3-virtualend
+*.env
 *sublime*
-instance
+db-data
+nginx_secrets
+*.sqlite
+*.db

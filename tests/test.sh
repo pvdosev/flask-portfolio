@@ -19,8 +19,8 @@ username=$(shuf -n1  /usr/share/dict/words)
 password=$(shuf -n1  /usr/share/dict/words)
 wrongpassword="hlerb"
 
-register () { curl -d "username=$1&password=$2" -X POST http://localhost:5000/auth/register; }
-login () { curl -d "username=$1&password=$2" -X POST http://localhost:5000/auth/login; }
+register () { curl -d "username=$1&password=$2" -X POST http://localhost:8000/auth/register; }
+login () { curl -d "username=$1&password=$2" -X POST http://localhost:8000/auth/login; }
 
 assert "$(register "" "$password")" "Username is required"
 assert "$(register "$username" "")" "Password is required"

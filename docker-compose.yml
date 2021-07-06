@@ -1,11 +1,52 @@
 version: "3"
 services:
+
   web:
     build: .
-    ports:
-      - "8000:5000"
-    restart: always
+    restart: unless-stopped
     env_file:
-      - .env
+      - ./instance/app.env
     volumes:
       - ./instance/folio.sqlite:/app/instance/folio.sqlite
+    networks:
+      - folio
+    depends_on:
+      - db
+
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    env_file:
+      - ./instance/database.env
+    logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+    volumes:
+      - ./instance/db-data:/var/lib/postgresql/data/
+    networks:
+      - folio
+
+  nginx:
+    container_name: nginx
+    build: 
+      context: ./nginx
+      network: host
+      args:
+        - CERTBOT_EMAIL # set in build command
+        - DOMAIN_LIST # again, set in build command
+    restart: unless-stopped
+    env_file: ./instance/nginx-certbot.env
+    ports: 
+      - 80:80
+      - 443:443
+    volumes:
+      - ./instance/nginx_secrets:/etc/letsencrypt
+      - ./nginx/:/etc/nginx/user_conf.d
+    depends_on:
+      - web
+
+
+networks:
+  folio:
+    driver: bridge

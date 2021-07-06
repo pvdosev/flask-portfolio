@@ -5,11 +5,6 @@ def create_app(test_config=None):
 
     app = Flask(__name__)
 
-    app.config.from_mapping(
-        SECRET_KEY='shush',
-        DATABASE='sqliteext:///%s' % os.path.join(app.instance_path, 'data2.sqlite'),
-    )
-
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
