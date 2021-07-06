@@ -1,7 +1,7 @@
 .venv
 __pycache__
 *.pyc
-*.env
+.env
 *sublime*
 db-data
 nginx_secrets
