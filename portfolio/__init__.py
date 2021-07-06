@@ -1,11 +1,14 @@
 import os
 from flask import Flask, render_template, send_from_directory, request, g, escape
-from dotenv import load_dotenv
 
 def create_app(test_config=None):
 
-    load_dotenv()
     app = Flask(__name__)
+
+    app.config.from_mapping(
+        SECRET_KEY=os.getenv("SECRET_KEY"),
+        DATABASE=os.getenv("DATABASE")
+    )
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
