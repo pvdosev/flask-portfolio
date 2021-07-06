@@ -27,26 +27,6 @@ services:
     networks:
       - folio
 
-  nginx:
-    container_name: nginx
-    build: 
-      context: ./nginx
-      network: host
-      args:
-        - CERTBOT_EMAIL=$CERTBOT_EMAIL # set in ./instance/nginx-certbot.env
-        - DOMAIN_LIST=$DOMAIN_LIST # again, set ./instance/nginx-certbot.env
-    restart: unless-stopped
-    env_file: .env
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - letsencrypt:/etc/letsencrypt
-      - ./nginx/:/etc/nginx/user_conf.d
-    depends_on:
-      - web
-
-
 networks:
   folio:
     driver: bridge

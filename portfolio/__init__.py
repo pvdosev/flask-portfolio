@@ -1,8 +1,10 @@
 import os
 from flask import Flask, render_template, send_from_directory, request, g, escape
+from dotenv import load_dotenv
 
 def create_app(test_config=None):
 
+    load_dotenv()
     app = Flask(__name__)
 
     if test_config is None:
