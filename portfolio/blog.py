@@ -48,12 +48,12 @@ def create():
     return render_template('blog/create.html')
 
 def get_post(slug, check_author=True):
-    post = get_or_none(Post.slug == slug)
+    post = Post.get_or_none(Post.slug == slug)
 
     if post is None:
-        abort(404, f"Post id {id} doesn't exist.")
+        abort(404, f"Post named {slug} doesn't exist.")
 
-    if check_author and post.author_id != g.user.id:
+    if check_author and post.author_id.user_id != g.user.user_id:
         abort(403)
 
     return post

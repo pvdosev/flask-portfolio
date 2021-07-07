@@ -10,6 +10,9 @@ A small pixel styled portfolio website with a blog, written with Flask and SQLit
 
 Make sure you have `python3` and `pip` installed
 
+You will also need a working `postgresql` server on the same machine, or elsewhere.
+You can set its location in the .env file.
+
 Create virtual environment using virtualenv
 ```bash
 $ python -m venv python3-virtualenv
@@ -24,16 +27,12 @@ pip install -r requirements.txt
 
 Make sure you have `docker` and `docker-compose` installed and running.
 
-Modify the example .env files, which will get loaded by Docker.
-They are located inside the `instance` directory.
+Modify the example.env file, and rename it to .env. It will hold the local settings for everything running inside Docker.
 
-Run
-```bash
-docker-compose up
-```
 
 ## Usage
 
+### Bare metal:
 Use development .env file
 ```
 URL=localhost:5000
@@ -53,6 +52,18 @@ Windows:
 Start flask development server
 ```bash
 $ flask run
+```
+
+### Docker:
+
+Development:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
+```
+
+Production:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose-prod.yml up
 ```
 
 ## Contributing

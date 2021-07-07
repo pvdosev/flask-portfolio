@@ -1,9 +1,14 @@
 import os
 from flask import Flask, render_template, send_from_directory, request, g, escape
+from werkzeug.debug import DebuggedApplication
 
 def create_app(test_config=None):
 
     app = Flask(__name__)
+
+    # this allows us to use the interactive debugger even with gunicorn
+    if app.debug:
+        app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
 
     app.config.from_mapping(
         SECRET_KEY=os.getenv("SECRET_KEY"),

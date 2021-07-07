@@ -8,4 +8,4 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-CMD [ "python3", "-m" , "gunicorn", "--workers=4", "--bind=0.0.0.0:5000", "portfolio:create_app()"]
+CMD python3 -m flask init-db; python3 -m gunicorn "portfolio:create_app()"
