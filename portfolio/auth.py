@@ -42,9 +42,7 @@ def register():
             error = f"User {username} is already registered."
 
         if error is None:
-            User.create(
-                username=username, password=generate_password_hash(password)
-            )
+            User.create(username=username, password=generate_password_hash(password))
             return redirect(url_for("auth.login"))
 
         flash(error)

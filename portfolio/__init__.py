@@ -36,9 +36,7 @@ def create_app(test_config=None):
 
     @app.route("/character")
     def character():
-        return render_template(
-            "character.html", title="About Us", url=os.getenv("URL")
-        )
+        return render_template("character.html", title="About Us", url=os.getenv("URL"))
 
     @app.route("/health")
     def health():
