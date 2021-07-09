@@ -1,4 +1,4 @@
-name: Python package
+name: Python linting and testing
 
 on:
   # Trigger on push or pull request
