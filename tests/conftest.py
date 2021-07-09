@@ -15,6 +15,7 @@ def app():
         {
             "TESTING": True,
             "DATABASE": "sqliteext:///%s" % db_path,
+            "SECRET_KEY": "test",
         }
     )
 
