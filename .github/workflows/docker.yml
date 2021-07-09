@@ -1,10 +1,19 @@
 name: docker-compose building and testing
-on: push
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Add .env file
+        run: printf '%s\n' 'URL=localhost:5000' 'FLASK_ENV=development' 'FLASK_APP=portfolio' 'SECRET_KEY=secret' "DATABASE='postgresql://portfolio:fun@db:5432/portfolio'" 'POSTGRES_USER=portfolio' 'POSTGRES_PASSWORD=fun' 'POSTGRES_DB=portfolio' 'CERTBOT_EMAIL=email@example.com' 'DOMAIN_LIST=example.com' 'PYTHONUNBUFFERED=TRUE' 'GUNICORN_CMD_ARGS="--bind=0.0.0.0:5000 --workers=1 --reload"' > .env
       - name: Build the stack
         run: docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d
       - name: Test
