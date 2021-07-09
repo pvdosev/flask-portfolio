@@ -11,13 +11,13 @@ def create_app(test_config=None):
     if app.debug:
         app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
 
-    app.config.from_mapping(
-        SECRET_KEY=os.getenv("SECRET_KEY"), DATABASE=os.getenv("DATABASE")
-    )
-
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile("config.py", silent=True)
+        if os.getenv("SECRET_KEY") and os.getenv("DATABASE"):
+            app.config.from_mapping(
+                SECRET_KEY=os.getenv("SECRET_KEY"), DATABASE=os.getenv("DATABASE")
+            )
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
@@ -42,17 +42,25 @@ def create_app(test_config=None):
     def health():
         return "ok"
 
-    from . import db
+    if "DATABASE" in app.config:
 
-    db.init_app(app)
+        from . import db
 
-    from . import auth
+        db.init_app(app)
 
-    app.register_blueprint(auth.bp)
+        from . import auth
 
-    from . import blog
+        app.register_blueprint(auth.bp)
 
-    app.register_blueprint(blog.bp)
-    app.add_url_rule("/blog", endpoint="blog")
+        from . import blog
+
+        app.register_blueprint(blog.bp)
+        app.add_url_rule("/blog", endpoint="blog")
+
+    else:
+
+        @app.route("/<path:path>")
+        def catch_all(path):
+            return "Database not loaded. Did you set the DATABASE variable?"
 
     return app

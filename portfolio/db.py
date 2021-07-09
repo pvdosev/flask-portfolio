@@ -10,9 +10,9 @@ def init_app(app):
 
 
 def init_db():
-    db = db_wrapper.database
-    db.connect()
-    db.create_tables([User, Post])
+    with db_wrapper.database:
+        db_wrapper.database.create_tables([User, Post])
+    db_wrapper.database.close()
 
 
 # This decorator makes the below function into a CLI command
