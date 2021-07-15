@@ -2,6 +2,7 @@ version: "3"
 services:
 
   web:
+    container_name: web
     build: .
     restart: unless-stopped
     env_file:
@@ -12,6 +13,7 @@ services:
       - db
 
   db:
+    container_name: postgres
     image: postgres:alpine
     restart: unless-stopped
     env_file:
